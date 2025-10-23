@@ -113,6 +113,28 @@ end;
  *  Symmetry and polarity                                                     
  ******************************************************************************/
 
+opaque symbol ∨_sym x y : π ((x ∨ y) = (y ∨ x))≔
+begin
+  assume x y;
+  refine propExt (x ∨ y) (y ∨ x) _ _
+    {assume h0;
+    refine ∨ₑ h0 _ _
+      {assume h1; refine ∨ᵢ₂ h1}
+      {assume h1; refine ∨ᵢ₁ h1}}
+    {assume h0;
+    refine ∨ₑ h0 _ _
+      {assume h1; refine ∨ᵢ₂ h1}
+      {assume h1; refine ∨ᵢ₁ h1}}
+end;
+
+opaque symbol ∧_sym x y : π ((x ∧ y) = (y ∧ x))≔
+begin
+  assume x y;
+  refine propExt (x ∧ y) (y ∧ x) _ _
+    {assume h; refine ∧ᵢ (∧ₑ₂ h) (∧ₑ₁ h)}
+    {assume h; refine ∧ᵢ (∧ₑ₂ h) (∧ₑ₁ h)}
+end;
+
 opaque symbol =_sym [T] (x y : τ T) : π((x = y) = (y = x)) ≔
 begin
   assume T x y;
