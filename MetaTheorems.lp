@@ -10,9 +10,9 @@ The library aims to prove the following meta-theorems for conjunctions and disju
    - ∧ᵢₙ is the n-ary version of the introduction rule for ∧.
    - ∧ₑₙ is the n-ary version of the elimination rule for ∧.
 
-** Permutate:
+** Permute:
    The theorem is instantiated with:
-   - A list of natural numbers representing a disjunction.
+   - A list of natural numbers representing a permutation.
    - A list of terms of type `o` representing a clause.
 
    The theorem verifies that the permuted clause still contains all literals of the original clause. 
@@ -20,10 +20,10 @@ The library aims to prove the following meta-theorems for conjunctions and disju
 
 ** Delete:
    The theorem is instantiated with three lists:
-   - A list of natural numbers representing the indices of literals in the original list. 
+   1. A list of natural numbers representing the indices of literals in the original list. 
      For literals occurring multiple times, the index of the first occurrence is used for all of the
      subsequent occurrences. For example, for `π (l0 ∨ l1 ∨ l2 ∨ l1)`, this list would be `(0, 1, 2, 1)`.
-   - A second list of natural numbers indicating the desired positions of the literals in the clause.
+   2. A second list of natural numbers indicating the desired positions of the literals in the clause.
      If for instance the second occurrence of `l1` in `π (l0 ∨ l1 ∨ l2 ∨ l1)` should be deleted, the 
      derived clause would be `π (l0 ∨ l1 ∨ l2)`, and the list that must be provided would be (0, 1, 2).
      To delete the first occurrence of `l1`, and derive the clause `π (l0 ∨ l2 ∨ l1)`, the list would 
@@ -345,7 +345,7 @@ end;
 
 
 ////////////////////////////////////////////////////////////////////////////////
-///////////////////////////////// meta-therems /////////////////////////////////
+///////////////////////////////// meta-theorems ////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 
 ///////////////////// Natural Deduction rules over lists ///////////////////////
