@@ -1209,6 +1209,24 @@ begin
         refine H0 h1}
 end;
 
+symbol mem_rev [a: Set] (beq : τ a → τ a → 𝔹) l x: 
+  π (∈ beq x l) → π (∈ beq x (rev l))≔
+begin
+    assume a beq;
+    induction
+        {assume x h; refine h}
+        {assume x0 l h0 x1 h1;
+        have H0: π (istrue (∈ beq x1 (rev (x0 ⸬ l))))
+          {rewrite rev_cons;
+          rewrite mem_cat beq x1 (rev l) (x0 ⸬ □);
+          refine ∨ₑ (case_𝔹 (beq x1 x0)) _ _ 
+            {assume h2; simplify; rewrite h2; refine ⊤ᵢ}
+            {assume h2; 
+            have H!: π ((beq x1 x0 or ∈ beq x1 l) ⇒ (∈ beq x1 l))
+                {rewrite h2; simplify; assume h3; refine h3};
+            refine orᵢ₁ (∈ beq x1 (x0 ⸬ □)) (h0 x1 (H! h1))}};
+        refine H0}
+end;
 
 // index
 
@@ -1403,6 +1421,21 @@ begin
         {refine ⊤ᵢ}
         {assume x0 l0 l0⊆l0; simplify; rewrite (istrue=true (beq_idem x0));
         refine subset_cons_r beq x0 l0 l0 l0⊆l0;}
+end;
+
+opaque symbol subset_from_mem [a: Set] (beq : τ a → τ a → 𝔹) (beq_rfl : Π x:τ a, π(beq x x)) l l' : 
+    (Π x , π (∈ beq x l) → π (∈ beq x l')) → π (⊆ beq l l')≔
+begin
+    assume a beq beq_rfl;
+    induction
+        {assume l h; refine ⊤ᵢ}
+        {assume x l h0 l' h1;
+        refine andᵢ [∈ beq x l'] [⊆ beq l l'] _ _ 
+            {refine h1 x _; refine orᵢ₁ (∈ beq x l) (beq_rfl x)}
+            {refine h0 l' _;
+            assume x0 h2;
+            refine h1 x0 _;
+            refine mem_tail beq x0 x l h2}}
 end;
 
 // is_prefix
@@ -1654,6 +1687,62 @@ begin
         {refine ⊤ᵢ}
         {assume x0 l0 h0; simplify; rewrite istrue=true (beq_rfl x0); 
         refine subset_cons_filter_not beq beq_sym beq_correct l0 (undup_first beq l0) x0 h0}
+end;
+
+// undup1
+
+symbol undup1 : Π [a : Set], (τ a → τ a → 𝔹) → 𝕃 a → 𝕃 a → 𝕃 a;
+rule undup1 _ $acc □ ↪ rev $acc
+with undup1 $beq $acc ($x ⸬ $l) ↪
+  if (∈ $beq $x $acc) (undup1 $beq $acc $l) (undup1 $beq ($x ⸬ $acc) $l);
+
+opaque symbol mem_undup1_or [a: Set] (beq : τ a → τ a → 𝔹) (beq_correct : Π x, Π y, π (beq x y) → π (x = y)) (beq_rfl : Π x:τ a, π (beq x x)) (l : 𝕃 a) acc x :
+    π ((∈ beq x acc) or (∈ beq x l)) → π (∈ beq x (undup1 beq acc l)) ≔
+begin
+  assume a beq beq_correct beq_rfl;
+  induction
+    {assume l x h0; refine mem_rev beq l x h0}
+    {assume x0 l0 ih acc x1 h1; simplify;
+    refine ∨ₑ (case_𝔹 (∈ beq x0 acc)) _ _
+      {assume hx0acc_true; rewrite hx0acc_true; simplify if;
+      have prem : π ((∈ beq x1 acc) or (∈ beq x1 l0))
+        {refine orₑ [∈ beq x1 acc] [∈ beq x1 (x0 ⸬ l0)] ((∈ beq x1 acc) or (∈ beq x1 l0)) h1 _ _
+          {assume hx1acc; refine orᵢ₁ [∈ beq x1 acc] (∈ beq x1 l0) hx1acc }
+          {assume hx1_in_cons;
+          refine orₑ [beq x1 x0] [∈ beq x1 l0] ((∈ beq x1 acc) or (∈ beq x1 l0)) hx1_in_cons _ _
+            {assume hx1x0;
+            have hx1acc : π (∈ beq x1 acc) 
+              {rewrite (beq_correct x1 x0 hx1x0); refine true=istrue hx0acc_true};
+            refine orᵢ₁ [∈ beq x1 acc] (∈ beq x1 l0) hx1acc}
+              {assume hx1l0;
+              refine orᵢ₂ (∈ beq x1 acc) [∈ beq x1 l0] hx1l0}}};
+      refine ih acc x1 prem}
+      {assume hx0acc_false;
+      rewrite hx0acc_false; simplify if;
+      have prem : π ((∈ beq x1 (x0 ⸬ acc)) or (∈ beq x1 l0))
+        {refine orₑ [∈ beq x1 acc] [∈ beq x1 (x0 ⸬ l0)]((∈ beq x1 (x0 ⸬ acc)) or (∈ beq x1 l0)) h1 _ _
+          {assume hx1acc;
+            have hx1_cons : π (∈ beq x1 (x0 ⸬ acc))
+              {refine mem_tail beq x1 x0 acc hx1acc };
+            refine orᵢ₁ [∈ beq x1 (x0 ⸬ acc)] (∈ beq x1 l0) hx1_cons}
+          {assume hx1_in_cons;
+            refine orₑ [beq x1 x0] [∈ beq x1 l0] ((∈ beq x1 (x0 ⸬ acc)) or (∈ beq x1 l0)) hx1_in_cons _ _
+            {assume hx1x0;
+            have hx1_cons : π (∈ beq x1 (x0 ⸬ acc))
+                {rewrite beq_correct x1 x0 hx1x0; refine orᵢ₁ (∈ beq x0 acc) (beq_rfl x0)};
+            refine orᵢ₁ [∈ beq x1 (x0 ⸬ acc)] (∈ beq x1 l0) hx1_cons;}
+            {assume hx1l0;
+            refine orᵢ₂ (∈ beq x1 (x0 ⸬ acc)) [∈ beq x1 l0] hx1l0}}};
+      refine ih (x0 ⸬ acc) x1 prem}}
+end;
+
+opaque symbol subset_undup1 [a: Set] (beq : τ a → τ a → 𝔹) (beq_correct : Π x, Π y, π (beq x y) → π(x = y)) (beq_rfl : Π x:τ a, π(beq x x)) (l: 𝕃 a): 
+    π (⊆ beq l (undup1 beq □ l)) ≔
+begin
+    assume a beq beq_correct beq_rfl l;
+    refine subset_from_mem beq beq_rfl l (undup1 beq □ l) _; assume x h0;
+    refine mem_undup1_or beq beq_correct beq_rfl l □ x _; simplify;
+    refine h0
 end;
 
 // map
