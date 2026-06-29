@@ -1,6 +1,8 @@
 .*.aux
+build/
 *.v
 !mappings.v
+!partial_stdlib/*.v
 *.vo*
 *.glob
 rocq.mk

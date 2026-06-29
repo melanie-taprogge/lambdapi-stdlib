@@ -1,0 +1,2 @@
+Require Import mappings.
+Definition lp_u00ac_u2203 : forall v1053 : Type', forall v1054 : v1053 -> Prop, (~ (ex_ v1053 (fun v1056 : v1053 => v1054 v1056))) -> @all v1053 (fun v1057 : v1053 => ~ (v1054 v1057)) := fun v1058 : Type' => fun v1059 : v1058 -> Prop => fun v1061 : ~ (ex_ v1058 (fun v1062 : v1058 => v1059 v1062)) => fun v1063 : v1058 => fun v1064 : v1059 v1063 => v1061 (@ex_intro v1058 (fun v1065 : v1058 => v1059 v1065) v1063 v1064).

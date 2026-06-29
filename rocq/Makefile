@@ -1,22 +1,17 @@
-LPFILES := $(wildcard ../*.lp)
-VFILES := $(LPFILES:../%.lp=%.v)
-VOFILES := $(VFILES:%=%o)
+COQC ?= coqc
 
-default: v
+.PHONY: all support generated clean
 
-v: $(VFILES)
+all: generated
 
-%.v: encoding.lp mappings.lp ../%.lp
-	lambdapi export -o stt_coq --encoding encoding.lp --use-notations --mapping mappings.lp --requiring mappings ../$*.lp > $@ #--renaming $(HOL2DK_DIR)/renaming.lp --requiring "$(REQUIRING)"
+support: mappings.vo
 
-clean-v:
-	rm -f $(VFILES)
+mappings.vo: mappings.v
+	$(COQC) mappings.v
 
-rocq.mk: _CoqProject
-	rocq makefile -f _CoqProject -o $@
+generated:
+	$(MAKE) -C partial_stdlib
 
-vo: rocq.mk
-	$(MAKE) -f rocq.mk
-
-clean-vo:
-	rm -f $(VOFILES)
+clean:
+	$(MAKE) -C partial_stdlib clean
+	rm -f .*.aux *.glob *.vo *.vos *.vok rocq.mk rocq.mk.conf .rocq.mk.d

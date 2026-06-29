@@ -111,9 +111,23 @@ symbol or : 𝔹 → 𝔹 → 𝔹;
 notation or infix left 20;
 
 rule true  or _     ↪ true
-with _     or true  ↪ true
-with false or $b    ↪ $b
-with $b    or false ↪ $b;
+with false or $b    ↪ $b;
+
+opaque symbol or_true_lhs [p : 𝔹] : 
+  π ((p or true) = true) ≔
+begin
+  induction
+    {reflexivity}
+    {reflexivity}
+end;
+
+opaque symbol or_false_lhs [p : 𝔹] : 
+  π ((p or false) = p) ≔
+begin
+  induction
+    {reflexivity}
+    {reflexivity}
+end;
 
 opaque symbol ∨_istrue [p q : 𝔹] : π(p or q) → π(p ∨ q) ≔
 begin
@@ -154,8 +168,8 @@ end;
 opaque symbol orC p q : π (p or q = q or p) ≔
 begin
     induction
-    { reflexivity; }
-    { reflexivity; }
+    { assume q; rewrite or_true_lhs [q]; reflexivity }
+    { assume q; rewrite or_false_lhs [q]; reflexivity }
 end;
 
 opaque symbol orA p q r : π ((p or q) or r = p or (q or r)) ≔

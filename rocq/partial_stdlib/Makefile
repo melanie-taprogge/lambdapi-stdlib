@@ -1,0 +1,15 @@
+COQC ?= coqc
+
+ORDER := \
+  mappings.v \
+  Prop.v Set.v FOL.v Eq.v Bool.v Classic.v Comp.v HOL.v Impred.v \
+  FunExt.v PropExt.v Epsilon.v Prod.v String.v Option.v Nat.v Pos.v \
+  Z.v List.v Conj.v Disj.v
+
+.PHONY: all clean
+
+all:
+	for f in $(ORDER); do $(COQC) "$$f"; done
+
+clean:
+	rm -f .*.aux *.glob *.vo *.vos *.vok
