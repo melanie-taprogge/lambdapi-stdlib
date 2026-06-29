@@ -165,6 +165,18 @@ begin
   }
 end;
 
+opaque symbol eqn_sym x y : π(eqn x y) → π(eqn y x) ≔
+begin
+  assume x y h; refine eqn_complete y x _;
+  symmetry;
+  refine eqn_correct x y _; refine h
+end;
+
+opaque symbol eqn_refl x : π(eqn x x) ≔
+begin
+  assume x; refine eqn_complete x x _; reflexivity
+end;
+
 // addition
 
 symbol + : ℕ → ℕ → ℕ; notation + infix left 20;
@@ -1766,6 +1778,11 @@ begin
   { assume n h; rewrite factS n; apply leq_pmulr (n +1) (n !) (fact_gt0 n) }
 end;
 
+// enable printing of natural numbers in decimal notation
+
+builtin "nat_zero" ≔ _0;
+builtin "nat_succ" ≔ +1;
+
 // shortcuts
 
 symbol _1 ≔ _0 +1;
@@ -1778,11 +1795,6 @@ symbol _7 ≔ _6 +1;
 symbol _8 ≔ _7 +1;
 symbol _9 ≔ _8 +1;
 symbol _10 ≔ _9 +1;
-
-// enable printing of natural numbers in decimal notation
-
-builtin "nat_zero" ≔ _0;
-builtin "nat_succ" ≔ +1;
 
 // enable parsing of natural numbers in decimal notation
 

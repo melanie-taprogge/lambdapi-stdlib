@@ -3,7 +3,25 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
-## 1.3.0
+## Unreleased
+
+### Added
+
+- Conj: theorems for structural operations on the level of nary conjunctions 
+- Disj: theorems for structural operations on the level of nary disjunctions
+- List: ⊆, rem_nth, undup_first, and related theorems
+
+### Fixed
+
+- definition of Pos.mul
+
+## 1.3.1 (2025-11-25)
+
+### Fixed
+
+- declare theorems as opaque symbols
+
+## 1.3.0 (2025-08-01)
 
 ### Added
 
