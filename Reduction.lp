@@ -3,9 +3,18 @@ The rules given here all correspond to proved equalities in their corresponding 
 They were removed to increase the compatibility with native Rocq encodings. 
 */
 
-// Rules for Nat.lp
+// Rules from Bool.lp
 
+require Stdlib.Bool as B;
 require Stdlib.Nat as N;
+require Stdlib.List as L;
+require Stdlib.Pos as P;
+require Stdlib.Z as Z;
+
+rule _ B.or B.true  ↪ B.true
+with $b B.or B.false ↪ $b;
+
+// Rules for Nat.lp
 
 rule $x N.+ N._0 ↪ $x;
 
@@ -28,8 +37,6 @@ rule N.min $x $x ↪ $x;
 
 // Rules for List.lp
 
-require Stdlib.List as L;
-
 rule $m L.++ L.□ ↪ $m;
 
 rule L.size ($l L.++ $m) ↪ L.size $l N.+ L.size $m;
@@ -45,9 +52,15 @@ rule L.drop _ L.□ ↪ L.□;
 rule L.take _ L.□ ↪ L.□;
 
 
+// Rules for Pos.lp
+
+rule P.add $x P.H ↪ P.succ $x
+with P.add P.H $y ↪ P.succ $y;
+
+rule P.add_carry $x P.H ↪ P.add $x (P.O P.H)
+with P.add_carry P.H $y ↪ P.add (P.O P.H) $y;
+
+
 // Rules for Z.lp
 
-require Stdlib.Z as Z;
-
-rule $x Z.+ Z.0 ↪ $x;
-
+rule $x Z.+ Z.Z0 ↪ $x;
