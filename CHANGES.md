@@ -15,6 +15,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - definition of Pos.mul
 
+### Changed
+
+- Removed/ changed rewrite rules to match the native Rocq encodings
+- Reintroduced the original rules in Reduction.lp
+
 ## 1.3.1 (2025-11-25)
 
 ### Fixed

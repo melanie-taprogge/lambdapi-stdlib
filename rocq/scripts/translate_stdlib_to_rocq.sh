@@ -36,8 +36,8 @@ Defaults:
   SOURCE_DIR = repository root
   OUTPUT_DIR = rocq/build/rocq
 
-Files named *_rules.lp are intentionally ignored: they are optional Lambdapi
-rewrite-rule compatibility modules, not part of the Rocq export.
+Reduction.lp and files named *_rules.lp are intentionally ignored: they provide
+optional Lambdapi rewrite-rule compatibility, not part of the Rocq export.
 EOF
 }
 
@@ -68,7 +68,7 @@ fi
 rm -rf "$BUILD"
 mkdir -p "$LP" "$DK" "$ROCQ" "$LOG"
 
-find "$SRC" -maxdepth 1 -name '*.lp' ! -name '*_rules.lp' -exec cp {} "$LP"/ \;
+find "$SRC" -maxdepth 1 -name '*.lp' ! -name '*_rules.lp' ! -name 'Reduction.lp' -exec cp {} "$LP"/ \;
 cp "$SRC/lambdapi.pkg" "$LP/lambdapi.pkg"
 cp "$ROCQ_ROOT/encoding.lp" "$ROCQ/encoding.lp"
 cp "$ROCQ_ROOT/mappings.lp" "$ROCQ/mappings.lp"

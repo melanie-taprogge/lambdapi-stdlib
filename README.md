@@ -65,9 +65,10 @@ rocq/scripts/translate_stdlib_to_rocq.sh
 By default, this writes generated files to `rocq/build/rocq`. The script
 translates the configured standard-library modules via Dedukti, applies the
 Rocq mappings from `rocq/`, and checks each generated `.v` file with `coqc`.
-Files named `*_rules.lp` are ignored during this translation; they are optional
-Lambdapi compatibility modules that restore rewrite rules removed from the
-Rocq-compatible core.
+`Reduction.lp` is ignored during this translation; it is an optional Lambdapi
+compatibility module that restores rewrite rules removed from the
+Rocq-compatible core. Stale files named `*_rules.lp`, if present, are ignored as
+well.
 
 To overwrite the checked generated files in `rocq/partial_stdlib`, pass that
 directory explicitly:
