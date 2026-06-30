@@ -3,16 +3,18 @@ The rules given here all correspond to proved equalities in their corresponding 
 They were removed to increase the compatibility with native Rocq encodings. 
 */
 
-// Rules from Bool.lp
-
 require Stdlib.Bool as B;
 require Stdlib.Nat as N;
 require Stdlib.List as L;
 require Stdlib.Pos as P;
 require Stdlib.Z as Z;
 
+
+// Rules from Bool.lp
+
 rule _ B.or B.true  ↪ B.true
 with $b B.or B.false ↪ $b;
+
 
 // Rules for Nat.lp
 

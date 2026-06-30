@@ -157,7 +157,7 @@ with Zpos $x + Zneg $y ↪ sub $x $y
 with Zneg $x + Zpos $y ↪ sub $y $x
 with Zneg $x + Zneg $y ↪ Zneg (add $x $y);
 
-opaque symbol +Z0 x : π ((x + Z0) = x)≔
+opaque symbol +Z0 x : π (x + Z0 = x)≔
 begin
   induction
     {reflexivity}
@@ -367,7 +367,7 @@ with Zneg _  ≐ Z0      ↪ Lt
 with Zneg _  ≐ Zpos _  ↪ Lt
 with Zneg $p ≐ Zneg $q ↪ opp (compare $p $q);
 
-symbol Zneg≐ p q : π ((Zneg p ≐ Zneg q) = compare q p)≔
+symbol Zneg≐ p q : π ((Zneg p ≐ Zneg q) = compare q p) ≔
 begin
   assume p q; rewrite compare_com; reflexivity
 end;
