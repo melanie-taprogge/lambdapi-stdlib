@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/),
 and this project adheres to [Semantic Versioning](https://semver.org/).
 
+## Unreleased
+
+### Changed
+
+- Changed rewrite rules to be in line with the Rocq standard library.
+- Moved rules not in line with Rocq to the module ExtraRules.
+
 ## 1.4.0 (2026-07-07)
 
 ### Added
@@ -14,11 +21,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Fixed
 
 - definition of Pos.mul
-
-### Changed
-
-- Removed/ changed rewrite rules to match the native Rocq encodings
-- Reintroduced the original rules in Reduction.lp
 
 ## 1.3.1 (2025-11-25)
 
