@@ -1,16 +1,39 @@
-SRC := $(wildcard *.lp)
-OBJ := $(SRC:%.lp=%.lpo)
+MAKEFLAGS += -r -k -j$(shell nproc)
 
-default: $(OBJ)
+LPO_MK := lpo.mk
 
-$(OBJ)&: $(SRC)
-	lambdapi check -c $^
+EXCLUDE := _opam
+EXCEPT := $(EXCLUDE:%=! -path './%/*')
 
+LP := $(shell find . -name '*.lp' $(EXCEPT) -print)
+LPO := $(LP:%=%o)
+
+.PHONY: default
+default: $(LPO)
+
+LP_OPTIONS = -c -v 0
+
+%.lpo: %.lp
+	@echo lambdapi check $< ...
+	@lambdapi check $(LP_OPTIONS) $<
+
+include $(LPO_MK)
+
+$(LPO_MK): $(LP)
+	@echo create/update $@ ...
+	@lambdapi depend > $@
+
+.PHONY: clean
 clean:
-	rm -f $(OBJ)
+	-find . -name '*.lpo' $(EXCEPT) -delete
+	-rm $(LPO_MK)
 
-install: $(OBJ)
-	lambdapi install lambdapi.pkg $(SRC) $(OBJ)
+.PHONY: install
+install: lambdapi.pkg $(LP) $(LPO)
+	@echo lambdapi install ...
+	@lambdapi install
 
-uninstall:
-	lambdapi uninstall lambdapi.pkg
+.PHONY: uninstall
+uninstall: lambdapi.pkg
+	@echo lambdapi uninstall ...
+	@lambdapi uninstall
