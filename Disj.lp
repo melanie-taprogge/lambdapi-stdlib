@@ -353,12 +353,12 @@ end;
 assert l0 l1 l2 ⊢ delete (0 ⸬ 1 ⸬ 0 ⸬ 0 ⸬ 2 ⸬ □) (0 ⸬ 1 ⸬ 2 ⸬ □) (l0 ⸬ l1 ⸬ l2 ⸬ □) ⊤ᵢ: 
     π (l0 ∨ l1 ∨ l0 ∨ l0 ∨ l2) → π (l0 ∨ l1 ∨ l2);
 
-    
+
 opaque symbol deleteDoubles (id_list : 𝕃 nat) (c: 𝕃 o) : 
-    π(disj (literals c id_list)) → π(disj (literals c (undup_first eqn id_list))) ≔
+    π(disj (literals c id_list)) → π(disj (literals c (undup1 eqn □ id_list))) ≔
 begin
     assume id_list c h2;
-    refine delete id_list (undup_first eqn id_list) c (subset_undup_first eqn eqn_correct eqn_refl eqn_sym id_list) h2;
+    refine delete id_list (undup1 eqn □ id_list) c (subset_undup1 eqn eqn_correct eqn_refl id_list) h2;
 end; 
 
 assert l0 l1 l2 ⊢ deleteDoubles (0 ⸬ 1 ⸬ 0 ⸬ 0 ⸬ 2 ⸬ □) (l0 ⸬ l1 ⸬ l2 ⸬ □): 
