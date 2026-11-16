@@ -7,6 +7,7 @@ The library proves the following meta-theorems:
 ** n-ary Natural Deduction rules:
    - ∧ᵢₙ is the n-ary version of the introduction rule for ∧.
    - ∧ₑₙ is the n-ary version of the elimination rule for ∧.
+   - conj_transform lifts a proof transformation at one index to the whole conjunction.
 
 ---
 
@@ -122,4 +123,24 @@ begin
             have ConjImpCl : π (conj cnf ⇒ clause cnf id)
                 {refine h0 cnf (indexes_decrement id x cnf h2)};
             refine clause_ext cnf x id (ConjImpCl (conj_tail x cnf h3))}}
+end;
+
+// conj_transform
+opaque symbol conj_transform [q : τ o] (c : 𝕃 o) (n : ℕ) :
+    π (nth ⊤ c n ⇒ q) → π (conj c) → π (conj (set_nth ⊤ c n q)) ≔
+begin
+  assume q;
+  induction
+    {induction
+      {assume f h;
+       refine f h}
+      {assume n ih f h;
+       refine conj_sound ⊤ (set_nth ⊤ □ n q) (∧ᵢ h (ih (λ unused, f h) h))}}
+    {assume p tail ih;
+     induction
+       {assume f h;
+        refine conj_sound q tail (∧ᵢ (f (conj_head p tail h)) (conj_tail p tail h))}
+       {assume n ihIndex f h;
+        refine conj_sound p (set_nth ⊤ tail n q)
+          (∧ᵢ (conj_head p tail h) (ih n f (conj_tail p tail h)))}}
 end;
